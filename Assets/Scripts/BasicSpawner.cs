@@ -9,7 +9,12 @@ using System.Threading.Tasks;
 public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     private const string SESSION_NAME = "TestRoom";
+
+    [SerializeField] private NetworkPrefabRef _playerPrefab;
+
+    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     private NetworkRunner _runner;
+    private bool _mouseButton0;
 
     private void OnGUI()
     {
@@ -62,9 +67,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         });
     }
 
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
-
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
@@ -84,8 +86,6 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    private bool _mouseButton0;
-
     private void Update()
     {
         _mouseButton0 = _mouseButton0 | Input.GetMouseButton(0);
@@ -94,7 +94,13 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
+        data = ApplyMovementInput(data);
+        data = ApplyMouseInput(data);
+        input.Set(data);
+    }
 
+    private static NetworkInputData ApplyMovementInput(NetworkInputData data)
+    {
         if (Input.GetKey(KeyCode.W))
             data.direction += Vector3.forward;
         if (Input.GetKey(KeyCode.S))
@@ -103,11 +109,14 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             data.direction += Vector3.left;
         if (Input.GetKey(KeyCode.D))
             data.direction += Vector3.right;
+        return data;
+    }
 
+    private NetworkInputData ApplyMouseInput(NetworkInputData data)
+    {
         data.buttons.Set(NetworkInputData.MOUSEBUTTON0, _mouseButton0);
         _mouseButton0 = false;
-
-        input.Set(data);
+        return data;
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
