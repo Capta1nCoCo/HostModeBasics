@@ -115,6 +115,7 @@ MonoBehaviour:
   _movementSpeed: 5
   _spawnDelayInSeconds: 0.5
   _prefabBall: {fileID: 5522074715803666986, guid: d356f665382c0474fb166a984aa5bdf9, type: 3}
+  _prefabPhysxBall: {fileID: 5607536130582050091, guid: ad95f9482397a734497588caf289f3ea, type: 3}
 --- !u!1 &7788394228753240564
 GameObject:
   m_ObjectHideFlags: 0
