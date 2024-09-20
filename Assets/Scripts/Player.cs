@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour
     [SerializeField] private float _movementSpeed = 5.0f;
     [SerializeField] private float _spawnDelayInSeconds = 0.5f;
     [SerializeField] private Ball _prefabBall;
+    [SerializeField] private PhysxBall _prefabPhysxBall;
 
     [Networked] private TickTimer _delay { get; set; }
 
@@ -44,10 +45,24 @@ public class Player : NetworkBehaviour
                 _delay = TickTimer.CreateFromSeconds(Runner, _spawnDelayInSeconds);
                 Runner.Spawn(_prefabBall,
                     transform.position + _forward, Quaternion.LookRotation(_forward),
-                    Object.InputAuthority, (runner, o) =>
+                    Object.InputAuthority, 
+                    (runner, obj) =>
                     {
                         // Initialize the Ball before synchronizing it
-                        o.GetComponent<Ball>().Init();
+                        obj.GetComponent<Ball>().Init();
+                    });
+            }
+            else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+            {
+                _delay = TickTimer.CreateFromSeconds(Runner, _spawnDelayInSeconds);
+                Runner.Spawn(_prefabPhysxBall,
+                    transform.position + _forward,
+                    Quaternion.LookRotation(_forward),
+                    Object.InputAuthority,
+                    (runner, obj) =>
+                    {
+                        const float PBALL_VELOCITY = 10.0f;
+                        obj.GetComponent<PhysxBall>().Init(PBALL_VELOCITY * _forward);
                     });
             }
         }
