@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1550957003101366346}
   - component: {fileID: 5522074715803666986}
   m_Layer: 0
-  m_Name: Ball
+  m_Name: KinematicBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
