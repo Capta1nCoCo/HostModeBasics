@@ -35,16 +35,22 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private async void StartGame(GameMode mode)
     {
-        CreateFusionRunnerWithUserInputReceiver();
-        gameObject.AddComponent<RunnerSimulatePhysics3D>();
+        AddNetworkRunnerCollectingInput();
+        AddPhysicsSimulationRunner();
         SceneRef scene = CreateNetworkInfoFromCurrentScene();
         await StartOrJoinGameSession(mode, scene);
     }
 
-    private void CreateFusionRunnerWithUserInputReceiver()
+    private void AddNetworkRunnerCollectingInput()
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
         _runner.ProvideInput = true;
+    }
+
+    private void AddPhysicsSimulationRunner()
+    {
+        var physicsRunner = gameObject.AddComponent<RunnerSimulatePhysics3D>();
+        physicsRunner.ClientPhysicsSimulation = ClientPhysicsSimulation.SimulateForward;
     }
 
     private static SceneRef CreateNetworkInfoFromCurrentScene()
