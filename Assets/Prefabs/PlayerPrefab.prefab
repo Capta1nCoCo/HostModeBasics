@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5056009944684552160}
   - component: {fileID: 7131237413327679045}
   - component: {fileID: 5432795207855878683}
+  - component: {fileID: 1595972380551734049}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -56,6 +57,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 7131237413327679045}
   - {fileID: 5432795207855878683}
+  - {fileID: 1595972380551734049}
 --- !u!143 &5056009944684552160
 CharacterController:
   m_ObjectHideFlags: 0
@@ -114,8 +116,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movementSpeed: 5
   _spawnDelayInSeconds: 0.5
-  _prefabBall: {fileID: 5522074715803666986, guid: d356f665382c0474fb166a984aa5bdf9, type: 3}
+  _prefabKinematicBall: {fileID: 5522074715803666986, guid: d356f665382c0474fb166a984aa5bdf9, type: 3}
   _prefabPhysxBall: {fileID: 5607536130582050091, guid: ad95f9482397a734497588caf289f3ea, type: 3}
+--- !u!114 &1595972380551734049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5139548628416409879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c55d68b9023271c47b4f7b1733f2f515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _meshRenderer: {fileID: 6933288237561905530}
+  _spawnedProjectile: 0
 --- !u!1 &7788394228753240564
 GameObject:
   m_ObjectHideFlags: 0
