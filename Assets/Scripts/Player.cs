@@ -1,6 +1,7 @@
 using Fusion;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerColor))]
 public class Player : NetworkBehaviour
 {
     [SerializeField] private float _movementSpeed = 5.0f;
@@ -12,11 +13,13 @@ public class Player : NetworkBehaviour
 
     private Vector3 _forward;
     private NetworkCharacterController _cc;
+    private PlayerColor _color;
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
         _forward = Vector3.forward;
+        _color = GetComponent<PlayerColor>();
     }
 
     public override void FixedUpdateNetwork()
@@ -26,7 +29,7 @@ public class Player : NetworkBehaviour
             data.direction.Normalize();
             _cc.Move(_movementSpeed * data.direction * Runner.DeltaTime);
             CheckForwardDirection(data);
-            LaunchBallByInput(data);
+            ProcessPlayerInput(data);
         }
     }
 
@@ -36,18 +39,23 @@ public class Player : NetworkBehaviour
             _forward = data.direction;
     }
 
-    private void LaunchBallByInput(NetworkInputData data)
+    private void ProcessPlayerInput(NetworkInputData data)
     {
         if (HasStateAuthority && delayTimer.ExpiredOrNotRunning(Runner))
         {
-            if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
-            {
-                SpawnBall(_prefabKinematicBall);
-            }
-            else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
-            {
-                SpawnBall(_prefabPhysxBall);
-            }
+            LaunchBallByInput(data);
+        }
+    }
+
+    private void LaunchBallByInput(NetworkInputData data)
+    {
+        if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
+        {
+            SpawnBall(_prefabKinematicBall);
+        }
+        else if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON1))
+        {
+            SpawnBall(_prefabPhysxBall);
         }
     }
 
@@ -58,6 +66,7 @@ public class Player : NetworkBehaviour
             transform.position + _forward, Quaternion.LookRotation(_forward),
             Object.InputAuthority,
             InitBallBeforeSync());
+        _color.TriggerColorChange();
     }
 
     private NetworkRunner.OnBeforeSpawned InitBallBeforeSync()
