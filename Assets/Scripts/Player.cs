@@ -1,9 +1,8 @@
 using Fusion;
-using System;
-using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerColor))]
+[RequireComponent (typeof(RPC_Chat))]
 public class Player : NetworkBehaviour
 {
     [SerializeField] private float _movementSpeed = 5.0f;
@@ -16,45 +15,22 @@ public class Player : NetworkBehaviour
     private Vector3 _forward;
     private NetworkCharacterController _cc;
     private PlayerColor _color;
-    private TMP_Text _messages;
+    private RPC_Chat _chat;
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
         _forward = Vector3.forward;
         _color = GetComponent<PlayerColor>();
+        _chat = GetComponent<RPC_Chat>();
     }
 
     private void Update()
     {
         if (Object.HasInputAuthority && Input.GetKeyDown(KeyCode.R))
         {
-            RPC_SendMessage("Hello Mate!");
+            _chat.RPC_SendMessage("Hello Mate!");
         }
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    public void RPC_SendMessage(string message, RpcInfo info = default)
-    {
-        RPC_RelayMessage(message, info.Source);
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    private void RPC_RelayMessage(string message, PlayerRef messageSource)
-    {
-        if (_messages == null)
-            _messages = FindObjectOfType<TMP_Text>();
-
-        if (messageSource == Runner.LocalPlayer)
-        {
-            message = $"You said: {message}\n";
-        }
-        else
-        {
-            message = $"Some other player said: {message}\n";
-        }
-
-        _messages.text += message;
     }
 
     public override void FixedUpdateNetwork()
