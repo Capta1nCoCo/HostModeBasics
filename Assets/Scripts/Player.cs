@@ -2,6 +2,7 @@ using Fusion;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerColor))]
+[RequireComponent (typeof(RPC_Chat))]
 public class Player : NetworkBehaviour
 {
     [SerializeField] private float _movementSpeed = 5.0f;
@@ -14,12 +15,22 @@ public class Player : NetworkBehaviour
     private Vector3 _forward;
     private NetworkCharacterController _cc;
     private PlayerColor _color;
+    private RPC_Chat _chat;
 
     private void Awake()
     {
         _cc = GetComponent<NetworkCharacterController>();
         _forward = Vector3.forward;
         _color = GetComponent<PlayerColor>();
+        _chat = GetComponent<RPC_Chat>();
+    }
+
+    private void Update()
+    {
+        if (Object.HasInputAuthority && Input.GetKeyDown(KeyCode.R))
+        {
+            _chat.RPC_SendMessage("Hello Mate!");
+        }
     }
 
     public override void FixedUpdateNetwork()

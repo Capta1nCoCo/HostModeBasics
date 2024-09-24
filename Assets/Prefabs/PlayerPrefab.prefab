@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7131237413327679045}
   - component: {fileID: 5432795207855878683}
   - component: {fileID: 1595972380551734049}
+  - component: {fileID: 8591237398973919290}
   m_Layer: 0
   m_Name: PlayerPrefab
   m_TagString: Untagged
@@ -58,6 +59,7 @@ MonoBehaviour:
   - {fileID: 7131237413327679045}
   - {fileID: 5432795207855878683}
   - {fileID: 1595972380551734049}
+  - {fileID: 8591237398973919290}
 --- !u!143 &5056009944684552160
 CharacterController:
   m_ObjectHideFlags: 0
@@ -131,7 +133,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshRenderer: {fileID: 6933288237561905530}
-  _spawnedProjectile: 0
+  _changedColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &8591237398973919290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5139548628416409879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 732064fb498e98246aaa81e01ebacfa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7788394228753240564
 GameObject:
   m_ObjectHideFlags: 0
